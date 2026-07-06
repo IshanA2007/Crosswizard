@@ -1,47 +1,21 @@
-# 🧠 Crosswizard
+# Crosswizard
 
-## 📌 Overview  
-Crosswizard is a recursive puzzle-solving engine that takes a partially filled crossword grid and a word list, and attempts to fill in the grid with valid intersecting words. It's built for logic puzzle enthusiasts and developers interested in constraint-solving algorithms, showcasing efficient backtracking and pruning.
+Crosswizard fills in a crossword. You give it a grid with some squares already filled and a word list, and it works out a set of intersecting words that complete the grid. It is a small project I built to get the constraint-solving right: the interesting part is the backtracking search and the pruning that keeps it fast.
 
----
+## How it works
 
-## 🚀 Features  
-- ✅ Recursive backtracking engine for word placement  
-- ✅ Smart pruning based on current board state  
-- ✅ Support for custom grids and wordlists  
+The solver places words one slot at a time and backtracks whenever a placement leaves a slot with no valid word left. The speedups come from checking the board state as it goes, so it abandons a branch the moment the letters already on the board rule out every remaining candidate, instead of filling the whole grid and discovering the conflict at the end. Candidate words are looked up from a bundled list of about twenty thousand words.
 
----
+## Running it
 
-## 🛠️ Technologies Used  
-
-| Area            | Stack/Tools                                   |
-|-----------------|-----------------------------------------------|
-| Backend         | Python                                        |
-
----
-
-## 👨‍💻 My Role  
-> Built the entire solving engine from scratch using Python.
-
-- Designed and implemented a recursive backtracking algorithm  
-- Heavily optimized performance by pruning invalid paths early (even the most complex of crosswords can be solved in milliseconds)
-- Added support for dynamic grid parsing and custom word lists  
-
----
-
-## 🧪 How to Run Locally
-
-*Disclaimer: The input arguments for this engine are very complicated, and it's most likely pointless to try feeding it your own input. This repository only serves to display the specific methods used to optimize the performance of the engine.*
+The solver lives in `Xwords2.py` and runs from the command line. The `20k.txt` word list ships with the repo, so you can try it right away. There is a worked example in the code comments showing the grid input format, which is compact and takes a minute to read before your first run.
 
 ```bash
-# Clone the repo
-git clone https://github.com/IshanA2007/crosswizard.git
-cd crosswizard
+python Xwords2.py
+```
 
-# (Optional) Create and activate a virtual environment
-python -m venv venv
-source venv/bin/activate  # or venv\Scripts\activate on Windows
+## Notes and limitations
 
-# Run the solver 
-python xwords2.py [dictionary file name] [test case]
-# just so you know the bot works, here is one test case that you can run off the bat: python xwords2.py 20k.txt 8x9 14 V1x3E H5x0IGN# V0x3HERBS# V0x8SCAT# v4x7# v7x3 V6x3
+- The grid input format is terse. It is documented in the file, but it is meant for driving the solver rather than for hand-authoring large puzzles.
+- Everything lives in a single file. The point of the project was the algorithm, not the packaging.
+- There is no GUI. Output is printed to the terminal.
